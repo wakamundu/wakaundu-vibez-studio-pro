@@ -353,6 +353,13 @@ function loadProject(){
  }catch(e){}
 }
 loadProject();
+ if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => console.log("Studio offline mode ready"))
+      .catch(error => console.log("Offline setup error:", error));
+  });
+}
 </script>
 
 </body>
