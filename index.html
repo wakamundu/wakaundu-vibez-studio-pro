@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090711">
+<meta name="description" content="WakaûndūVibez Studio PRO music production workstation">
+<title>WakaûndūVibez Studio PRO</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090711;color:white;
+ font-family:Arial,sans-serif
+}
+header{
+ padding:22px 12px;text-align:center;
+ background:#151023;border-bottom:2px solid #ffd447
+}
+.banner{width:100%;display:block}
+h1{color:#ffd447;margin:12px 0}
+.tagline{color:#ec91d5}
+main{max-width:950px;margin:auto;padding:15px}
+.panel{
+ background:#191329;border:1px solid #7440a5;
+ border-radius:13px;padding:17px;margin:15px 0
+}
+h2{color:#e7b8ff}
+button{
+ background:#a855f7;color:white;border:0;
+ border-radius:8px;padding:12px 16px;
+ margin:5px;font-weight:bold
+}
+button:active{background:#ec4899}
+input,select{
+ background:#090711;color:white;
+ border:1px solid #a855f7;padding:10px;
+ border-radius:7px;max-width:100%
+}
+input[type=range]{width:100%}
+.grid{
+ display:grid;grid-template-columns:repeat(4,1fr);
+ gap:7px
+}
+.step{
+ padding:12px 2px;background:#302342;
+ border:1px solid #7548a0
+}
+.step.active{background:#e04b9a}
+.track{
+ padding:10px;margin:8px 0;
+ background:#302342;border-radius:8px
+}
+small{color:#c7b8d8}
+footer{text-align:center;color:#aaa;padding:25px}
+</style>
+</head>
+
+<body>
+
+<img class="banner" src="studio-banner.PNG"
+ alt="WakaûndūVibez Studio artwork"
+ onerror="this.style.display='none'">
+
+<header>
+<h1>WakaûndūVibez Studio PRO</h1>
+<p class="tagline">CREATE YOUR VIBE. BUILD YOUR SOUND.</p>
+<p>YOUR MUSIC. YOUR STUDIO. YOUR SOUND.</p>
+</header>
+
+<main>
+
+<section class="panel">
+<h2>🎙️ Vocal Recording Booth</h2>
+<p>Record your vocals using your phone microphone.</p>
+<button onclick="startRecording()">Start Recording</button>
+<button onclick="stopRecording()">Stop Recording</button>
+<audio id="vocalAudio" controls style="width:100%"></audio>
+<p><a id="downloadVocal" style="color:#ffd447"></a></p>
+<p id="recordStatus">Ready to record.</p>
+</section>
+
+<section class="panel">
+<h2>🎹 Korg-Style Synthesizer</h2>
+<p>Play notes and create melodies.</p>
+<label>Instrument sound</label>
+<select id="wave">
+<option value="sawtooth">Synth Lead</option>
+<option value="sine">Soft Keys</option>
+<option value="square">Electronic</option>
+<option value="triangle">Warm Tone</option>
+</select>
+<div class="grid" id="keys">
+<button onclick="playNote(261.63)">C</button>
+<button onclick="playNote(293.66)">D</button>
+<button onclick="playNote(329.63)">E</button>
+<button onclick="playNote(349.23)">F</button>
+<button onclick="playNote(392)">G</button>
+<button onclick="playNote(440)">A</button>
+<button onclick="playNote(493.88)">B</button>
+<button onclick="playNote(523.25)">C+</button>
+</div>
+<button onclick="stopSynth()">Stop Sound</button>
+</section>
+
+<section class="panel">
+<h2>🥁 Beat Maker</h2>
+<p>Build a 16-step drum pattern.</p>
+<label>Tempo: <span id="tempoValue">120</span> BPM</label>
+<input id="tempo" type="range" min="60" max="180" value="120"
+ oninput="tempoValue.textContent=this.value">
+<div>
+<strong>Kick</strong>
+<div class="grid" id="kick"></div>
+<strong>Snare</strong>
+<div class="grid" id="snare"></div>
+<strong>Hi-hat</strong>
+<div class="grid" id="hat"></div>
+</div>
+<button onclick="startBeat()">Play Beat</button>
+<button onclick="stopBeat()">Stop Beat</button>
+</section>
+
+<section class="panel">
+<h2>🎚️ Multitrack Workspace</h2>
+<p>Import audio files to build your project.</p>
+<input type="file" id="audioFiles" accept="audio/*" multiple>
+<div id="tracks"></div>
+</section>
+
+<section class="panel">
+<h2>🎤 Vocal Suite — Nectar-Inspired</h2>
+<p>Shape your vocal sound with real-time playback effects.</p>
+<label>Reverb</label>
+<input id="reverb" type="range" min="0" max="100" value="20">
+<label>Delay</label>
+<input id="delay" type="range" min="0" max="100" value="0">
+<label>Compression</label>
+<input id="compression" type="range" min="0" max="100" value="30">
+<label>Vocal tone</label>
+<input id="vocalTone" type="range" min="0" max="100" value="50">
+<p><small>These controls are a starting interface; advanced pitch correction and full vocal processing will be developed separately.</small></p>
+</section>
+
+<section class="panel">
+<h2>🎛️ Master Controls</h2>
+<label>Master volume</label>
+<input id="masterVolume" type="range" min="0" max="100" value="80">
+<button onclick="saveProject()">Save Project Settings</button>
+<p id="saveStatus"></p>
+</section>
+
+</main>
+
+<footer>
+WakaûndūVibez Studio PRO © 2026
+<br>Music production from your phone.
+</footer>
+
+<script>
+let recorder;
+let recordedChunks=[];
+let micStream=null;
+let audioContext=null;
+let synthOscillators=[];
+let beatTimer=null;
+let beatPosition=0;
+let tracks=[];
+
+function getAudioContext(){
+ if(!audioContext){
+  audioContext=new (window.AudioContext||window.webkitAudioContext)();
+ }
+ if(audioContext.state==="suspended") audioContext.resume();
+ return audioContext;
+}
+
+// VOCAL RECORDING
+async function startRecording(){
+ try{
+  micStream=await navigator.mediaDevices.getUserMedia({audio:true});
+  recordedChunks=[];
+  recorder=new MediaRecorder(micStream);
+  recorder.ondataavailable=e=>{
+   if(e.data.size>0) recordedChunks.push(e.data);
+  };
+  recorder.onstop=()=>{
+   const blob=new Blob(recordedChunks,{type:recorder.mimeType});
+   const url=URL.createObjectURL(blob);
+   vocalAudio.src=url;
+   downloadVocal.href=url;
+   downloadVocal.download="WakaunduVibez-Vocal.webm";
+   downloadVocal.textContent="Download Vocal Recording";
+   micStream.getTracks().forEach(t=>t.stop());
+  };
+  recorder.start();
+  recordStatus.textContent="Recording...";
+ }catch(e){
+  recordStatus.textContent="Microphone unavailable. Check browser permission and HTTPS.";
+ }
+}
+
+function stopRecording(){
+ if(recorder && recorder.state==="recording"){
+  recorder.stop();
+  recordStatus.textContent="Recording finished.";
+ }
+}
+
+// SYNTHESIZER
+function playNote(freq){
+ try{
+  const ctx=getAudioContext();
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  osc.type=wave.value;
+  osc.frequency.value=freq;
+  gain.gain.setValueAtTime(0.18,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+1.2);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime+1.2);
+  synthOscillators.push(osc);
+ }catch(e){}
+}
+
+function stopSynth(){
+ synthOscillators.forEach(o=>{try{o.stop()}catch(e){}});
+ synthOscillators=[];
+}
+
+// BEAT MAKER
+const patterns={kick:[],snare:[],hat:[]};
+
+["kick","snare","hat"].forEach(name=>{
+ const holder=document.getElementById(name);
+ for(let i=0;i<16;i++){
+  const b=document.createElement("button");
+  b.textContent=i+1;
+  b.className="step";
+  b.onclick=()=>{
+   patterns[name][i]=!patterns[name][i];
+   b.classList.toggle("active",patterns[name][i]);
+  };
+  holder.appendChild(b);
+  patterns[name][i]=false;
+ }
+});
+
+function drumSound(type){
+ const ctx=getAudioContext();
+ const osc=ctx.createOscillator();
+ const gain=ctx.createGain();
+ if(type==="kick"){
+  osc.type="sine";
+  osc.frequency.setValueAtTime(150,ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(40,ctx.currentTime+0.15);
+  gain.gain.setValueAtTime(0.9,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.2);
+ }else if(type==="snare"){
+  osc.type="triangle";
+  osc.frequency.value=180;
+  gain.gain.setValueAtTime(0.5,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.12);
+ }else{
+  osc.type="square";
+  osc.frequency.value=7000;
+  gain.gain.setValueAtTime(0.12,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.04);
+ }
+ osc.connect(gain);
+ gain.connect(ctx.destination);
+ osc.start();
+ osc.stop(ctx.currentTime+0.25);
+}
+
+function beatTick(){
+ ["kick","snare","hat"].forEach(name=>{
+  if(patterns[name][beatPosition]) drumSound(name);
+ });
+ beatPosition=(beatPosition+1)%16;
+}
+
+function startBeat(){
+ stopBeat();
+ beatPosition=0;
+ const bpm=Number(tempo.value);
+ beatTick();
+ beatTimer=setInterval(beatTick,60000/bpm/4);
+}
+
+function stopBeat(){
+ if(beatTimer) clearInterval(beatTimer);
+ beatTimer=null;
+}
+
+// MULTITRACK IMPORT
+audioFiles.addEventListener("change",function(){
+ Array.from(this.files).forEach(file=>{
+  const url=URL.createObjectURL(file);
+  const id=tracks.length;
+  tracks.push({name:file.name,url});
+  const div=document.createElement("div");
+  div.className="track";
+  div.innerHTML="<strong></strong><br><audio controls style='width:100%'></audio>";
+  div.querySelector("strong").textContent=file.name;
+  div.querySelector("audio").src=url;
+  tracksArea.appendChild(div);
+ });
+});
+
+const tracksArea=document.getElementById("tracks");
+
+// SAVE SETTINGS
+function saveProject(){
+ const data={
+  tempo:tempo.value,
+  volume:masterVolume.value,
+  reverb:reverb.value,
+  delay:delay.value,
+  compression:compression.value,
+  vocalTone:vocalTone.value,
+  patterns:patterns
+ };
+ try{
+  localStorage.setItem("wakaunduvibez-project",JSON.stringify(data));
+  saveStatus.textContent="Project settings saved on this device.";
+ }catch(e){
+  saveStatus.textContent="Could not save settings on this device.";
+ }
+}
+
+function loadProject(){
+ try{
+  const data=JSON.parse(localStorage.getItem("wakaunduvibez-project"));
+  if(!data)return;
+  tempo.value=data.tempo||120;
+  tempoValue.textContent=tempo.value;
+  masterVolume.value=data.volume||80;
+  reverb.value=data.reverb||20;
+  delay.value=data.delay||0;
+  compression.value=data.compression||30;
+  vocalTone.value=data.vocalTone||50;
+  if(data.patterns){
+   Object.keys(patterns).forEach(name=>{
+    patterns[name]=data.patterns[name]||patterns[name];
+    document.getElementById(name).querySelectorAll("button")
+     .forEach((b,i)=>b.classList.toggle("active",!!patterns[name][i]));
+   });
+  }
+ }catch(e){}
+}
+loadProject();
+</script>
+
+</body>
+</html>
