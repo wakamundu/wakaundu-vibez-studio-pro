@@ -363,5 +363,114 @@ loadProject();
 }
 </script>
 
+<!-- WAKAÛNDŪVIBEZ STUDIO PRO DASHBOARD -->
+<section id="wv-pro-dashboard">
+  <style>
+    #wv-pro-dashboard {
+      background: linear-gradient(145deg,#090711,#211038);
+      color: white;
+      padding: 20px;
+      border: 2px solid #a855f7;
+      border-radius: 18px;
+      margin: 20px 0;
+      font-family: Arial,sans-serif;
+    }
+    #wv-pro-dashboard h2 {
+      color: #ffd447;
+      text-align: center;
+    }
+    .wv-pro-subtitle {
+      text-align: center;
+      color: #d8b4fe;
+    }
+    .wv-pro-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .wv-pro-card {
+      background: #151023;
+      border: 1px solid #a855f7;
+      border-radius: 12px;
+      padding: 16px 8px;
+      text-align: center;
+    }
+    .wv-pro-card button {
+      background: linear-gradient(90deg,#9333ea,#ec4899);
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      padding: 10px;
+      width: 100%;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    #wv-pro-message {
+      color: #ffd447;
+      text-align: center;
+      margin-top: 15px;
+    }
+  </style>
+
+  <h2>🎧 WAKAÛNDŪVIBEZ STUDIO PRO</h2>
+  <p class="wv-pro-subtitle">CREATE YOUR VIBE. BUILD YOUR SOUND.</p>
+
+  <div class="wv-pro-grid">
+    <div class="wv-pro-card">
+      🎙️
+      <h3>Vocal Recording</h3>
+      <button onclick="document.querySelector('body').scrollIntoView()">
+        Open Studio
+      </button>
+    </div>
+
+    <div class="wv-pro-card">
+      🎹
+      <h3>Korg Synth</h3>
+      <button onclick="document.getElementById('wv-pro-message').textContent='Find your existing Korg synthesizer in the studio.'">
+        Open Korg
+      </button>
+    </div>
+
+    <div class="wv-pro-card">
+      🥁
+      <h3>Beat Maker</h3>
+      <button onclick="document.getElementById('wv-pro-message').textContent='Your beat maker is ready in the original studio.'">
+        Open Beats
+      </button>
+    </div>
+
+    <div class="wv-pro-card">
+      🎚️
+      <h3>Multitrack</h3>
+      <button onclick="document.getElementById('wv-pro-message').textContent='Your multitrack workspace is in the original studio.'">
+        Open Tracks
+      </button>
+    </div>
+
+    <div class="wv-pro-card">
+      🎛️
+      <h3>Mix & Master</h3>
+      <button onclick="document.getElementById('wv-pro-message').textContent='Open your Mixing and Mastering section below.'">
+        Open Mixer
+      </button>
+    </div>
+
+    <div class="wv-pro-card">
+      ✨
+      <h3>Vocal Effects</h3>
+      <button onclick="document.getElementById('wv-pro-message').textContent='Explore your pitch correction and vocal effects tools.'">
+        Open Effects
+      </button>
+    </div>
+  </div>
+
+  <p id="wv-pro-message">Welcome to your PRO studio!</p>
+</section>
+<!-- END PRO DASHBOARD -->
+</body>
+</html>
+
 </body>
 </html>
