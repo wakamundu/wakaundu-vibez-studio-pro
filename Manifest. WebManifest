@@ -1,0 +1,19 @@
+{
+  "name": "WakaûndūVibez Studio PRO",
+  "short_name": "Vibez PRO",
+  "description": "Mobile music production studio",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#090711",
+  "theme_color": "#090711",
+  "icons": [
+    {
+      "src": "studio-banner.PNG",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
