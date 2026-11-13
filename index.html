@@ -3,481 +3,393 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#090711">
-<meta name="description" content="WakaûndūVibez Studio PRO music production workstation">
-<title>WakaûndūVibez Studio PRO</title>
-<link rel="manifest" href="./manifest.webmanifest">
- 
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#100d24">
+<title>WakaûndūVibez Studio</title>
 <style>
+:root{--bg:#100d24;--panel:#1b1735;--panel2:#241e45;--line:#39315f;--text:#f4f0ff;--muted:#b6aed0;--pink:#ff4fa3;--cyan:#5ee7e0;--gold:#f5c96a}
 *{box-sizing:border-box}
-body{
- margin:0;background:#090711;color:white;
- font-family:Arial,sans-serif
-}
-header{
- padding:22px 12px;text-align:center;
- background:#151023;border-bottom:2px solid #ffd447
-}
-.banner{width:100%;display:block}
-h1{color:#ffd447;margin:12px 0}
-.tagline{color:#ec91d5}
-main{max-width:950px;margin:auto;padding:15px}
-.panel{
- background:#191329;border:1px solid #7440a5;
- border-radius:13px;padding:17px;margin:15px 0
-}
-h2{color:#e7b8ff}
-button{
- background:#a855f7;color:white;border:0;
- border-radius:8px;padding:12px 16px;
- margin:5px;font-weight:bold
-}
-button:active{background:#ec4899}
-input,select{
- background:#090711;color:white;
- border:1px solid #a855f7;padding:10px;
- border-radius:7px;max-width:100%
-}
-input[type=range]{width:100%}
-.grid{
- display:grid;grid-template-columns:repeat(4,1fr);
- gap:7px
-}
-.step{
- padding:12px 2px;background:#302342;
- border:1px solid #7548a0
-}
-.step.active{background:#e04b9a}
-.track{
- padding:10px;margin:8px 0;
- background:#302342;border-radius:8px
-}
-small{color:#c7b8d8}
-footer{text-align:center;color:#aaa;padding:25px}
-body {
-  background:
-    linear-gradient(rgba(9,7,17,0.55),rgba(9,7,17,0.75)),
-    url("studio-banner.PNG") center center / cover fixed;
-  background-repeat: no-repeat;
-  background-color: #090711;
-}
+body{margin:0;background:radial-gradient(circle at top,#29204b,var(--bg) 55%);color:var(--text);font:15px system-ui,Arial,sans-serif}
+header{padding:18px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#100d24dd}
+h1{font-size:22px;margin:0;color:var(--cyan)}
+header p{margin:3px 0 0;color:var(--muted);font-size:12px}
+main{max-width:1200px;margin:auto;padding:16px;display:grid;gap:14px}
+.panel{background:linear-gradient(145deg,var(--panel),#17132d);border:1px solid var(--line);border-radius:16px;padding:15px;min-width:0}
+h2{font-size:17px;margin:0 0 12px;color:var(--gold)}
+h3{font-size:14px;margin:12px 0 7px;color:var(--cyan)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button,.filebtn{background:var(--panel2);color:var(--text);border:1px solid #514778;border-radius:10px;padding:10px 13px;font-weight:650;cursor:pointer}
+button.primary{background:linear-gradient(120deg,#b82e83,#6638a8);border:0}
+button.good{border-color:#267d77;color:var(--cyan)}
+button.danger{border-color:#9a4169;color:#ff9bc5}
+button:disabled{opacity:.45}
+input,select{background:#100d24;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px;max-width:100%}
+input[type=range]{accent-color:var(--pink);padding:0;width:130px}
+small,.muted{color:var(--muted)}
+.status{color:var(--cyan);font-size:13px;min-height:18px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stat{background:#100d24;border:1px solid var(--line);padding:12px;border-radius:12px}
+.stat strong{display:block;font-size:19px;color:var(--cyan)}
+canvas{width:100%;display:block;background:#0b0918;border:1px solid var(--line);border-radius:10px}
+#pianoRoll{height:300px;touch-action:none}
+#velocityLane,#automationLane{height:120px}
+#wave{height:85px}
+label{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.track{padding:9px;border:1px solid var(--line);border-radius:10px;margin-top:8px}
+.notehelp{font-size:12px;color:var(--muted);line-height:1.5}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 22px}
+@media(max-width:700px){.grid2,.grid3{grid-template-columns:1fr}main{padding:10px}.panel{padding:12px}}
 </style>
 </head>
-
 <body>
-
-<img class="banner" src="studio-banner.PNG"
- alt="WakaûndūVibez Studio artwork"
- onerror="this.style.display='none'">
-
 <header>
-<h1>WakaûndūVibez Studio PRO</h1>
-<p class="tagline">CREATE YOUR VIBE. BUILD YOUR SOUND.</p>
-<p>YOUR MUSIC. YOUR STUDIO. YOUR SOUND.</p>
+ <div><h1>WakaûndūVibez Studio</h1><p>Offline-first music workstation • Android / Chrome</p></div>
+ <div class="row"><button id="saveBtn" class="good">Save project</button><button id="loadBtn">Open saved</button><button id="newBtn">New project</button></div>
 </header>
-
 <main>
+ <section class="panel">
+  <h2>Project & transport</h2>
+  <div class="row">
+   <label>Project <input id="projectName" value="My Vibez Project" maxlength="60"></label>
+   <label>Tempo <input id="bpm" type="number" min="40" max="240" value="120" style="width:76px"> BPM</label>
+   <label>Master <input id="master" type="range" min="0" max="1" step=".01" value=".8"></label>
+   <button id="playMidi" class="primary">▶ Play MIDI</button><button id="stopMidi" class="danger">■ Stop</button>
+  </div>
+  <div class="grid3" style="margin-top:12px">
+   <div class="stat"><small>Audio engine</small><strong id="engineState">Ready</strong></div>
+   <div class="stat"><small>MIDI notes</small><strong id="noteCount">0</strong></div>
+   <div class="stat"><small>Storage</small><strong id="storageState">Local</strong></div>
+  </div>
+  <p class="status" id="mainStatus">Ready. Record audio, import a beat, or draw MIDI notes.</p>
+ </section>
 
-<section class="panel">
-<h2>🎙️ Vocal Recording Booth</h2>
-<p>Record your vocals using your phone microphone.</p>
-<button onclick="startRecording()">Start Recording</button>
-<button onclick="stopRecording()">Stop Recording</button>
-<audio id="vocalAudio" controls style="width:100%"></audio>
-<p><a id="downloadVocal" style="color:#ffd447"></a></p>
-<p id="recordStatus">Ready to record.</p>
-</section>
+ <section class="grid2">
+  <div class="panel">
+   <h2>Vocal recording</h2>
+   <div class="row"><button id="recordBtn" class="primary">● Record</button><button id="stopRecord" disabled>■ Stop recording</button><button id="playRecord" disabled>▶ Play take</button><button id="downloadRecord" disabled>Download take</button></div>
+   <canvas id="wave" width="900" height="110"></canvas>
+   <p class="status" id="recordStatus">Microphone permission is requested when you press Record.</p>
+   <audio id="takePlayer" controls style="width:100%;margin-top:8px"></audio>
+  </div>
+  <div class="panel">
+   <h2>Beat / audio import</h2>
+   <div class="row"><input id="audioFile" type="file" accept="audio/*"><button id="playBeat">▶ Play imported audio</button><button id="stopBeat">Stop</button></div>
+   <p class="status" id="beatStatus">Import an audio file from your device.</p>
+   <audio id="beatPlayer" controls style="width:100%;margin-top:8px"></audio>
+   <h3>Quick audio controls</h3>
+   <div class="row">
+    <label>Volume <input id="beatVolume" type="range" min="0" max="1" step=".01" value=".8"></label>
+    <label>Playback speed <input id="beatRate" type="range" min=".5" max="1.5" step=".05" value="1"></label>
+   </div>
+  </div>
+ </section>
 
-<section class="panel" id="wv-korg">
-<h2>🎹 Korg-Style Synthesizer</h2>
-<p>Play notes and create melodies.</p>
-<label>Instrument sound</label>
-<select id="wave">
-<option value="sawtooth">Synth Lead</option>
-<option value="sine">Soft Keys</option>
-<option value="square">Electronic</option>
-<option value="triangle">Warm Tone</option>
-</select>
-<div class="grid" id="keys">
-<button onclick="playNote(261.63)">C</button>
-<button onclick="playNote(293.66)">D</button>
-<button onclick="playNote(329.63)">E</button>
-<button onclick="playNote(349.23)">F</button>
-<button onclick="playNote(392)">G</button>
-<button onclick="playNote(440)">A</button>
-<button onclick="playNote(493.88)">B</button>
-<button onclick="playNote(523.25)">C+</button>
-</div>
-<button onclick="stopSynth()">Stop Sound</button>
-</section>
+ <section class="panel">
+  <h2>Advanced MIDI piano roll</h2>
+  <p class="notehelp">Tap an empty cell to add a note. Select a note to edit its length and velocity. Drag to move it. One bar contains 16 steps.</p>
+  <div class="row">
+   <label>Octave <select id="octave"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option></select></label>
+   <label>Note length <input id="noteLength" type="number" min="1" max="16" value="2" style="width:65px"></label>
+   <label>Velocity <input id="velocity" type="range" min="1" max="127" value="100"></label>
+   <button id="deleteNote" class="danger">Delete selected note</button><button id="clearMidi">Clear MIDI</button>
+  </div>
+  <canvas id="pianoRoll" width="1000" height="420"></canvas>
+  <div class="row" style="margin-top:10px"><button id="addBar">Add 1 bar</button><button id="exportMidi">Export MIDI data (JSON)</button><span class="muted" id="selectedInfo">No note selected</span></div>
+  <h3>Velocity editor</h3><canvas id="velocityLane" width="1000" height="120"></canvas>
+  <h3>Automation lane</h3>
+  <div class="row"><label>Parameter <select id="automationType"><option value="volume">Volume</option><option value="filter">Filter</option><option value="pan">Pan</option></select></label><label>Value <input id="automationValue" type="range" min="0" max="1" step=".01" value=".7"></label><button id="addAutomation">Add automation point</button><button id="clearAutomation">Clear lane</button></div>
+  <canvas id="automationLane" width="1000" height="120"></canvas>
+ </section>
 
-<section class="panel" id="wv-beatmaker">
-<h2>🥁 Beat Maker</h2>
-<p>Build a 16-step drum pattern.</p>
-<label>Tempo: <span id="tempoValue">120</span> BPM</label>
-<input id="tempo" type="range" min="60" max="180" value="120"
- oninput="tempoValue.textContent=this.value">
-<div>
-<strong>Kick</strong>
-<div class="grid" id="kick"></div>
-<strong>Snare</strong>
-<div class="grid" id="snare"></div>
-<strong>Hi-hat</strong>
-<div class="grid" id="hat"></div>
-</div>
-<button onclick="startBeat()">Play Beat</button>
-<button onclick="stopBeat()">Stop Beat</button>
-</section>
+ <section class="grid2">
+  <div class="panel">
+   <h2>Live synth & instrument</h2>
+   <div class="row"><label>Waveform <select id="waveType"><option>sawtooth</option><option>triangle</option><option>sine</option><option>square</option></select></label><label>Attack <input id="attack" type="range" min=".005" max=".5" step=".005" value=".02"></label><label>Release <input id="release" type="range" min=".05" max="1.5" step=".05" value=".25"></label></div>
+   <div class="row" style="margin-top:10px"><button class="key" data-note="60">C4</button><button class="key" data-note="62">D4</button><button class="key" data-note="64">E4</button><button class="key" data-note="65">F4</button><button class="key" data-note="67">G4</button><button class="key" data-note="69">A4</button><button class="key" data-note="71">B4</button><button class="key" data-note="72">C5</button></div>
+   <p class="muted">Tap keys to audition the virtual instrument.</p>
+  </div>
+  <div class="panel">
+   <h2>Mixing & effects</h2>
+   <div class="row"><label>Low EQ <input id="lowEQ" type="range" min="-12" max="12" value="0"></label><label>High EQ <input id="highEQ" type="range" min="-12" max="12" value="0"></label></div>
+   <div class="row"><label>Reverb <input id="reverb" type="range" min="0" max="1" step=".01" value=".15"></label><label>Echo <input id="echo" type="range" min="0" max=".8" step=".01" value="0"></label></div>
+   <div class="row"><label>Compressor <input id="compressor" type="checkbox" checked></label><button id="applyMix">Apply to beat playback</button></div>
+   <p class="notehelp">These EQ/effect controls are currently interface controls; full imported-audio effect rendering is not implemented yet. Recording downloads the original take.</p>
+   <p class="status" id="mixStatus">Effects panel ready.</p>
+  </div>
+ </section>
 
-<section class="panel">
-<h2>🎚️ Multitrack Workspace</h2>
-<p>Import audio files to build your project.</p>
-<input type="file" id="audioFiles" accept="audio/*" multiple>
-<div id="tracks"></div>
-</section>
-
-<section class="panel">
-<h2>🎤 Vocal Suite — Nectar-Inspired</h2>
-<p>Shape your vocal sound with real-time playback effects.</p>
-<label>Reverb</label>
-<input id="reverb" type="range" min="0" max="100" value="20">
-<label>Delay</label>
-<input id="delay" type="range" min="0" max="100" value="0">
-<label>Compression</label>
-<input id="compression" type="range" min="0" max="100" value="30">
-<label>Vocal tone</label>
-<input id="vocalTone" type="range" min="0" max="100" value="50">
-<p><small>These controls are a starting interface; advanced pitch correction and full vocal processing will be developed separately.</small></p>
-</section>
-
-<section class="panel">
-<h2>🎛️ Master Controls</h2>
-<label>Master volume</label>
-<input id="masterVolume" type="range" min="0" max="100" value="80">
-<button onclick="saveProject()">Save Project Settings</button>
-<p id="saveStatus"></p>
-</section>
-
+ <section class="panel">
+  <h2>Project files</h2>
+  <div class="row"><button id="exportProject">Export project backup</button><label class="filebtn">Import project backup <input id="importProject" type="file" accept=".json,application/json"></label></div>
+  <p class="notehelp">Projects save locally in this browser using IndexedDB. Export backups for important work.</p>
+  <p class="status" id="projectStatus"></p>
+ </section>
+ <footer>WakaûndūVibez Studio • Browser-based production foundation. AI services and native desktop VST3 hosting require separate integrations.</footer>
 </main>
 
-<footer>
-WakaûndūVibez Studio PRO © 2026
-<br>Music production from your phone.
-</footer>
-
 <script>
-let recorder;
-let recordedChunks=[];
-let micStream=null;
-let audioContext=null;
-let synthOscillators=[];
-let beatTimer=null;
-let beatPosition=0;
-let tracks=[];
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+let audioCtx=null, micStream=null, mediaRecorder=null, recordedChunks=[], takeBlob=null;
+let db=null, notes=[], selectedId=null, bars=2, automation=[], dragNote=null;
+const midiCanvas=$('pianoRoll'),mctx=midiCanvas.getContext('2d');
+const waveCanvas=$('wave'),wctx=waveCanvas.getContext('2d');
+const velocityCanvas=$('velocityLane'),vctx=velocityCanvas.getContext('2d');
+const autoCanvas=$('automationLane'),actx=autoCanvas.getContext('2d');
+const status=(id,msg)=>$(id).textContent=msg;
+const uid=()=>Math.random().toString(36).slice(2,10);
 
-function getAudioContext(){
- if(!audioContext){
-  audioContext=new (window.AudioContext||window.webkitAudioContext)();
- }
- if(audioContext.state==="suspended") audioContext.resume();
- return audioContext;
+function ensureAudio(){
+ if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+ if(audioCtx.state==='suspended')audioCtx.resume();
+ $('engineState').textContent='Running';
+ return audioCtx;
 }
+function initDB(){
+ return new Promise(resolve=>{
+  if(!('indexedDB'in window)){status('storageState','Unavailable');resolve(null);return;}
+  let req=indexedDB.open('WakaVibezStudioDB',1);
+  req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('projects'))req.result.createObjectStore('projects',{keyPath:'id'});};
+  req.onsuccess=()=>{db=req.result;resolve(db);};
+  req.onerror=()=>{status('storageState','Unavailable');resolve(null);};
+ });
+}
+function projectData(){return{id:'current',name:$('projectName').value,bpm:+$('bpm').value||120,bars,notes,automation,updated:new Date().toISOString()};}
+async function saveProject(){
+ const data=projectData();
+ if(db){
+  await new Promise((resolve,reject)=>{
+   let tx=db.transaction('projects','readwrite');
+   tx.objectStore('projects').put(data);
+   tx.oncomplete=resolve;tx.onerror=reject;
+  });
+  status('storageState','Saved');
+ }else localStorage.setItem('wakaVibezProject',JSON.stringify(data));
+ status('projectStatus','Project saved in this browser.');
+}
+async function loadProject(){
+ let data=null;
+ if(db)data=await new Promise(resolve=>{
+  let r=db.transaction('projects').objectStore('projects').get('current');
+  r.onsuccess=()=>resolve(r.result);r.onerror=()=>resolve(null);
+ });
+ if(!data){try{data=JSON.parse(localStorage.getItem('wakaVibezProject')||'null');}catch{}}
+ if(!data){status('projectStatus','No saved project found.');return;}
+ applyProject(data);status('projectStatus','Project opened.');
+}
+function applyProject(d){
+ $('projectName').value=d.name||'My Vibez Project';
+ $('bpm').value=d.bpm||120;bars=d.bars||2;
+ notes=Array.isArray(d.notes)?d.notes:[];
+ automation=Array.isArray(d.automation)?d.automation:[];
+ selectedId=null;drawAll();
+}
+function drawWave(){
+ wctx.clearRect(0,0,waveCanvas.width,waveCanvas.height);
+ wctx.strokeStyle='#5ee7e0';wctx.lineWidth=2;wctx.beginPath();
+ for(let x=0;x<waveCanvas.width;x++){
+  let y=55+Math.sin(x*.06)*Math.sin(x*.013)*24;
+  x===0?wctx.moveTo(x,y):wctx.lineTo(x,y);
+ }
+ wctx.stroke();
+}
+function pitchName(n){return['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'][n%12]+(Math.floor(n/12)-1);}
+function drawRoll(){
+ const W=midiCanvas.width,H=midiCanvas.height,steps=bars*16,sw=W/steps,rows=24,rh=H/rows;
+ mctx.clearRect(0,0,W,H);
+ for(let r=0;r<rows;r++){
+  let midi=83-r;
+  mctx.fillStyle=[1,3,6,8,10].includes(midi%12)?'#151126':'#201a3b';
+  mctx.fillRect(0,r*rh,W,rh);
+  mctx.strokeStyle='#342b55';mctx.beginPath();mctx.moveTo(0,r*rh);mctx.lineTo(W,r*rh);mctx.stroke();
+  if(midi%12===0){mctx.fillStyle='#c8bee5';mctx.font='11px Arial';mctx.fillText(pitchName(midi),3,r*rh+12);}
+ }
+ for(let s=0;s<=steps;s++){
+  mctx.strokeStyle=s%16===0?'#76669f':'#302747';
+  mctx.lineWidth=s%16===0?2:1;mctx.beginPath();
+  mctx.moveTo(s*sw,0);mctx.lineTo(s*sw,H);mctx.stroke();
+ }
+ notes.forEach(n=>{
+  let x=n.start*sw,y=(83-n.pitch)*rh,w=Math.max(5,n.length*sw-2);
+  mctx.fillStyle=n.id===selectedId?'#ff4fa3':'#5a9ee8';
+  mctx.fillRect(x+1,y+1,w,rh-2);
+  mctx.fillStyle='#fff';mctx.font='10px Arial';mctx.fillText(pitchName(n.pitch),x+4,y+rh-4);
+ });
+ $('noteCount').textContent=notes.length;
+}
+function drawVelocity(){
+ let W=velocityCanvas.width,H=velocityCanvas.height;
+ vctx.clearRect(0,0,W,H);vctx.strokeStyle='#514778';
+ vctx.beginPath();vctx.moveTo(0,H-15);vctx.lineTo(W,H-15);vctx.stroke();
+ let sw=W/(bars*16);
+ notes.forEach(n=>{
+  let x=n.start*sw+3,h=(n.velocity/127)*(H-25);
+  vctx.fillStyle=n.id===selectedId?'#ff4fa3':'#5ee7e0';
+  vctx.fillRect(x,H-15-h,Math.max(5,sw-6),h);
+ });
+}
+function drawAutomation(){
+ let W=autoCanvas.width,H=autoCanvas.height;
+ actx.clearRect(0,0,W,H);actx.strokeStyle='#514778';actx.strokeRect(0,0,W,H);
+ let pts=automation.filter(p=>p.type===$('automationType').value).sort((a,b)=>a.step-b.step);
+ actx.strokeStyle='#f5c96a';actx.lineWidth=2;actx.beginPath();
+ pts.forEach((p,i)=>{
+  let x=p.step/(bars*16)*W,y=H-p.value*(H-12)-6;
+  i?actx.lineTo(x,y):actx.moveTo(x,y);
+ });
+ actx.stroke();
+ pts.forEach(p=>{
+  let x=p.step/(bars*16)*W,y=H-p.value*(H-12)-6;
+  actx.fillStyle='#ff4fa3';actx.beginPath();actx.arc(x,y,5,0,Math.PI*2);actx.fill();
+ });
+}
+function drawAll(){drawRoll();drawVelocity();drawAutomation();$('selectedInfo').textContent=selectedId?'Selected note: '+(notes.find(n=>n.id===selectedId)?.pitch??''):'No note selected';}
+function selectNote(n){
+ selectedId=n?.id||null;
+ if(n){$('noteLength').value=n.length;$('velocity').value=n.velocity;}
+ drawAll();
+}
+function pointToCell(e){
+ let r=midiCanvas.getBoundingClientRect();
+ return{step:Math.max(0,Math.min(bars*16-1,Math.floor((e.clientX-r.left)/r.width*bars*16))),row:Math.max(0,Math.min(23,Math.floor((e.clientY-r.top)/r.height*24)))};
+}
+midiCanvas.addEventListener('pointerdown',e=>{
+ let p=pointToCell(e),pitch=83-p.row;
+ let found=[...notes].reverse().find(n=>p.step>=n.start&&p.step<n.start+n.length&&n.pitch===pitch);
+ if(found){selectNote(found);dragNote={id:found.id,offset:p.step-found.start};}
+ else{
+  let n={id:uid(),pitch,start:p.step,length:Math.max(1,+$('noteLength').value||2),velocity:+$('velocity').value||100};
+  notes.push(n);selectNote(n);dragNote={id:n.id,offset:0};
+ }
+ midiCanvas.setPointerCapture(e.pointerId);
+});
+midiCanvas.addEventListener('pointermove',e=>{
+ if(!dragNote)return;
+ let p=pointToCell(e),n=notes.find(x=>x.id===dragNote.id);
+ if(n){n.start=Math.max(0,Math.min(bars*16-n.length,p.step-dragNote.offset));n.pitch=83-p.row;drawAll();}
+});
+midiCanvas.addEventListener('pointerup',()=>dragNote=null);
+midiCanvas.addEventListener('pointercancel',()=>dragNote=null);
 
-// VOCAL RECORDING
-async function startRecording(){
+$('noteLength').onchange=()=>{
+ let n=notes.find(n=>n.id===selectedId);
+ if(n){n.length=Math.max(1,Math.min(16,+$('noteLength').value||1));drawAll();}
+};
+$('velocity').oninput=()=>{
+ let n=notes.find(n=>n.id===selectedId);
+ if(n){n.velocity=+$('velocity').value;drawAll();}
+};
+$('deleteNote').onclick=()=>{notes=notes.filter(n=>n.id!==selectedId);selectedId=null;drawAll();};
+$('clearMidi').onclick=()=>{if(confirm('Clear all MIDI notes?')){notes=[];selectedId=null;drawAll();}};
+$('addBar').onclick=()=>{bars=Math.min(16,bars+1);drawAll();};
+$('addAutomation').onclick=()=>{
+ let step=automation.length?Math.min(bars*16-1,Math.max(...automation.map(p=>p.step))+4):0;
+ automation.push({id:uid(),type:$('automationType').value,step,value:+$('automationValue').value});
+ drawAutomation();
+};
+$('clearAutomation').onclick=()=>{automation=automation.filter(p=>p.type!==$('automationType').value);drawAutomation();};
+$('automationType').onchange=drawAutomation;
+
+function download(blob,name){
+ let a=document.createElement('a'),u=URL.createObjectURL(blob);
+ a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);
+}
+$('exportMidi').onclick=()=>download(new Blob([JSON.stringify({bpm:+$('bpm').value,bars,notes,automation},null,2)],{type:'application/json'}),'vibez-midi-data.json');
+
+function noteFrequency(m){return 440*Math.pow(2,(m-69)/12);}
+function playTone(midi,when=0,duration=.25,velocity=100){
+ let c=ensureAudio(),osc=c.createOscillator(),gain=c.createGain();
+ let low=c.createBiquadFilter(),high=c.createBiquadFilter(),comp=c.createDynamicsCompressor(),out=c.createGain();
+ osc.type=$('waveType').value;osc.frequency.value=noteFrequency(midi);
+ low.type='lowshelf';low.frequency.value=180;low.gain.value=+$('lowEQ').value;
+ high.type='highshelf';high.frequency.value=4000;high.gain.value=+$('highEQ').value;
+ comp.threshold.value=-22;comp.ratio.value=4;out.gain.value=+$('master').value;
+ osc.connect(gain);gain.connect(low);low.connect(high);high.connect(comp);comp.connect(out);out.connect(c.destination);
+ let t=c.currentTime+when,a=+$('attack').value,rel=+$('release').value;
+ gain.gain.setValueAtTime(.0001,t);
+ gain.gain.linearRampToValueAtTime(Math.max(.001,velocity/127*.25),t+a);
+ gain.gain.setValueAtTime(Math.max(.001,velocity/127*.25),t+Math.max(a,duration));
+ gain.gain.exponentialRampToValueAtTime(.0001,t+duration+rel);
+ osc.start(t);osc.stop(t+duration+rel+.03);
+}
+let midiTimers=[];
+function stopMidi(){midiTimers.forEach(clearTimeout);midiTimers=[];status('mainStatus','MIDI playback stopped.');}
+$('playMidi').onclick=()=>{
+ stopMidi();
+ let bpm=Math.max(40,Math.min(240,+$('bpm').value||120)),sec=60/bpm/4;
+ notes.forEach(n=>{
+  let duration=Math.max(.05,n.length*sec*.92),delay=n.start*sec;
+  midiTimers.push(setTimeout(()=>playTone(n.pitch,0,duration,n.velocity),delay*1000));
+ });
+ status('mainStatus','Playing MIDI sequence.');
+};
+$('stopMidi').onclick=stopMidi;
+document.querySelectorAll('.key').forEach(b=>b.addEventListener('pointerdown',()=>playTone(+b.dataset.note,0,.35,100)));
+
+$('beatPlayer').volume=.8;
+let beatObjectUrl=null;
+$('audioFile').onchange=e=>{
+ let f=e.target.files[0];if(!f)return;
+ if(beatObjectUrl)URL.revokeObjectURL(beatObjectUrl);
+ beatObjectUrl=URL.createObjectURL(f);$('beatPlayer').src=beatObjectUrl;
+ status('beatStatus','Loaded: '+f.name);
+};
+$('beatVolume').oninput=()=>$('beatPlayer').volume=+$('beatVolume').value;
+$('beatRate').oninput=()=>$('beatPlayer').playbackRate=+$('beatRate').value;
+$('playBeat').onclick=()=>$('beatPlayer').play().catch(()=>status('beatStatus','Tap play again to allow playback.'));
+$('stopBeat').onclick=()=>{$('beatPlayer').pause();$('beatPlayer').currentTime=0;};
+$('applyMix').onclick=()=>status('mixStatus','Mixing controls are displayed; full audio-file effect rendering is not yet implemented.');
+
+let isRecording=false;
+$('recordBtn').onclick=async()=>{
  try{
-  micStream=await navigator.mediaDevices.getUserMedia({audio:true});
+  ensureAudio();
+  micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
   recordedChunks=[];
-  recorder=new MediaRecorder(micStream);
-  recorder.ondataavailable=e=>{
-   if(e.data.size>0) recordedChunks.push(e.data);
-  };
-  recorder.onstop=()=>{
-   const blob=new Blob(recordedChunks,{type:recorder.mimeType});
-   const url=URL.createObjectURL(blob);
-   vocalAudio.src=url;
-   downloadVocal.href=url;
-   downloadVocal.download="WakaunduVibez-Vocal.webm";
-   downloadVocal.textContent="Download Vocal Recording";
+  let mime=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus'].find(t=>MediaRecorder.isTypeSupported(t));
+  mediaRecorder=new MediaRecorder(micStream,mime?{mimeType:mime}:undefined);
+  mediaRecorder.ondataavailable=e=>{if(e.data.size)recordedChunks.push(e.data);};
+  mediaRecorder.onstop=()=>{
+   takeBlob=new Blob(recordedChunks,{type:mediaRecorder.mimeType||'audio/webm'});
+   $('takePlayer').src=URL.createObjectURL(takeBlob);
+   $('playRecord').disabled=false;$('downloadRecord').disabled=false;
+   status('recordStatus','Recording saved in this session. Download a copy to keep it.');
    micStream.getTracks().forEach(t=>t.stop());
   };
-  recorder.start();
-  recordStatus.textContent="Recording...";
- }catch(e){
-  recordStatus.textContent="Microphone unavailable. Check browser permission and HTTPS.";
+  mediaRecorder.start();isRecording=true;
+  $('recordBtn').disabled=true;$('stopRecord').disabled=false;
+  status('recordStatus','Recording…');
+ }catch(err){status('recordStatus','Microphone unavailable: '+err.message+'. Use HTTPS and allow microphone access.');}
+};
+$('stopRecord').onclick=()=>{
+ if(mediaRecorder&&isRecording){mediaRecorder.stop();isRecording=false;$('recordBtn').disabled=false;$('stopRecord').disabled=true;}
+};
+$('playRecord').onclick=()=>$('takePlayer').play();
+$('downloadRecord').onclick=()=>{
+ if(takeBlob)download(takeBlob,'waka-vocal-take.webm');
+};
+
+$('saveBtn').onclick=()=>saveProject().catch(e=>status('projectStatus','Save failed: '+e.message));
+$('loadBtn').onclick=()=>loadProject();
+$('newBtn').onclick=()=>{
+ if(confirm('Start a new project? Save or export your current work first.')){
+  notes=[];automation=[];bars=2;selectedId=null;
+  $('projectName').value='New Vibez Project';drawAll();
  }
-}
-
-function stopRecording(){
- if(recorder && recorder.state==="recording"){
-  recorder.stop();
-  recordStatus.textContent="Recording finished.";
- }
-}
-
-// SYNTHESIZER
-function playNote(freq){
- try{
-  const ctx=getAudioContext();
-  const osc=ctx.createOscillator();
-  const gain=ctx.createGain();
-  osc.type=wave.value;
-  osc.frequency.value=freq;
-  gain.gain.setValueAtTime(0.18,ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+1.2);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start();
-  osc.stop(ctx.currentTime+1.2);
-  synthOscillators.push(osc);
- }catch(e){}
-}
-
-function stopSynth(){
- synthOscillators.forEach(o=>{try{o.stop()}catch(e){}});
- synthOscillators=[];
-}
-
-// BEAT MAKER
-const patterns={kick:[],snare:[],hat:[]};
-
-["kick","snare","hat"].forEach(name=>{
- const holder=document.getElementById(name);
- for(let i=0;i<16;i++){
-  const b=document.createElement("button");
-  b.textContent=i+1;
-  b.className="step";
-  b.onclick=()=>{
-   patterns[name][i]=!patterns[name][i];
-   b.classList.toggle("active",patterns[name][i]);
-  };
-  holder.appendChild(b);
-  patterns[name][i]=false;
- }
-});
-
-function drumSound(type){
- const ctx=getAudioContext();
- const osc=ctx.createOscillator();
- const gain=ctx.createGain();
- if(type==="kick"){
-  osc.type="sine";
-  osc.frequency.setValueAtTime(150,ctx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(40,ctx.currentTime+0.15);
-  gain.gain.setValueAtTime(0.9,ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.2);
- }else if(type==="snare"){
-  osc.type="triangle";
-  osc.frequency.value=180;
-  gain.gain.setValueAtTime(0.5,ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.12);
- }else{
-  osc.type="square";
-  osc.frequency.value=7000;
-  gain.gain.setValueAtTime(0.12,ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.04);
- }
- osc.connect(gain);
- gain.connect(ctx.destination);
- osc.start();
- osc.stop(ctx.currentTime+0.25);
-}
-
-function beatTick(){
- ["kick","snare","hat"].forEach(name=>{
-  if(patterns[name][beatPosition]) drumSound(name);
- });
- beatPosition=(beatPosition+1)%16;
-}
-
-function startBeat(){
- stopBeat();
- beatPosition=0;
- const bpm=Number(tempo.value);
- beatTick();
- beatTimer=setInterval(beatTick,60000/bpm/4);
-}
-
-function stopBeat(){
- if(beatTimer) clearInterval(beatTimer);
- beatTimer=null;
-}
-
-// MULTITRACK IMPORT
-audioFiles.addEventListener("change",function(){
- Array.from(this.files).forEach(file=>{
-  const url=URL.createObjectURL(file);
-  const id=tracks.length;
-  tracks.push({name:file.name,url});
-  const div=document.createElement("div");
-  div.className="track";
-  div.innerHTML="<strong></strong><br><audio controls style='width:100%'></audio>";
-  div.querySelector("strong").textContent=file.name;
-  div.querySelector("audio").src=url;
-  tracksArea.appendChild(div);
- });
-});
-
-const tracksArea=document.getElementById("tracks");
-
-// SAVE SETTINGS
-function saveProject(){
- const data={
-  tempo:tempo.value,
-  volume:masterVolume.value,
-  reverb:reverb.value,
-  delay:delay.value,
-  compression:compression.value,
-  vocalTone:vocalTone.value,
-  patterns:patterns
- };
- try{
-  localStorage.setItem("wakaunduvibez-project",JSON.stringify(data));
-  saveStatus.textContent="Project settings saved on this device.";
- }catch(e){
-  saveStatus.textContent="Could not save settings on this device.";
- }
-}
-
-function loadProject(){
- try{
-  const data=JSON.parse(localStorage.getItem("wakaunduvibez-project"));
-  if(!data)return;
-  tempo.value=data.tempo||120;
-  tempoValue.textContent=tempo.value;
-  masterVolume.value=data.volume||80;
-  reverb.value=data.reverb||20;
-  delay.value=data.delay||0;
-  compression.value=data.compression||30;
-  vocalTone.value=data.vocalTone||50;
-  if(data.patterns){
-   Object.keys(patterns).forEach(name=>{
-    patterns[name]=data.patterns[name]||patterns[name];
-    document.getElementById(name).querySelectorAll("button")
-     .forEach((b,i)=>b.classList.toggle("active",!!patterns[name][i]));
-   });
-  }
- }catch(e){}
-}
-loadProject();
- if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js")
-      .then(() => console.log("Studio offline mode ready"))
-      .catch(error => console.log("Offline setup error:", error));
-  });
-}
+};
+$('exportProject').onclick=()=>download(new Blob([JSON.stringify(projectData(),null,2)],{type:'application/json'}),'waka-vibez-project.json');
+$('importProject').onchange=async e=>{
+ let f=e.target.files[0];if(!f)return;
+ try{applyProject(JSON.parse(await f.text()));status('projectStatus','Backup imported. Save to store it locally.');}
+ catch{status('projectStatus','Invalid project backup file.');}
+};
+$('compressor').onchange=()=>status('mixStatus','Compressor setting changed.');
+drawWave();drawAll();
+initDB().then(()=>{if(db)status('storageState','IndexedDB ready');loadProject();});
+window.addEventListener('beforeunload',()=>{if(micStream)micStream.getTracks().forEach(t=>t.stop());});
+})();
 </script>
-
-<!-- WAKAÛNDŪVIBEZ STUDIO PRO DASHBOARD -->
-<section id="wv-pro-dashboard">
-  <style>
-    #wv-pro-dashboard {
-      background: linear-gradient(145deg,#090711,#211038);
-      color: white;
-      padding: 20px;
-      border: 2px solid #a855f7;
-      border-radius: 18px;
-      margin: 20px 0;
-      font-family: Arial,sans-serif;
-    }
-    #wv-pro-dashboard h2 {
-      color: #ffd447;
-      text-align: center;
-    }
-    .wv-pro-subtitle {
-      text-align: center;
-      color: #d8b4fe;
-    }
-    .wv-pro-grid {
-      display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 12px;
-      margin-top: 20px;
-    }
-    .wv-pro-card {
-      background: #151023;
-      border: 1px solid #a855f7;
-      border-radius: 12px;
-      padding: 16px 8px;
-      text-align: center;
-    }
-    .wv-pro-card button {
-      background: linear-gradient(90deg,#9333ea,#ec4899);
-      color: white;
-      border: 0;
-      border-radius: 8px;
-      padding: 10px;
-      width: 100%;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    #wv-pro-message {
-      color: #ffd447;
-      text-align: center;
-      margin-top: 15px;
-    }
-  </style>
-
-  <h2>🎧 WAKAÛNDŪVIBEZ STUDIO PRO</h2>
-  <p class="wv-pro-subtitle">CREATE YOUR VIBE. BUILD YOUR SOUND.</p>
-
-  <div class="wv-pro-grid">
-    <div class="wv-pro-card">
-      🎙️
-      <h3>Vocal Recording</h3>
-      <button onclick="document.querySelector('body').scrollIntoView()">
-        Open Studio
-      </button>
-    </div>
-
-    <div class="wv-pro-card">
-      🎹
-      <h3>Korg Synth</h3>
-      <button onclick="document.getElementById('wv-korg').scrollIntoView({behavior:'smooth'})">
-Open Korg
-</button>
-    </div>
-
-    <div class="wv-pro-card">
-      🥁
-      <h3>Beat Maker</h3>
-     <button onclick="document.getElementById('wv-beatmaker').scrollIntoView({behavior:'smooth'})">
-Open Beats
-</button>
-    </div>
-
-    <div class="wv-pro-card">
-      🎚️
-      <h3>Multitrack</h3>
-      <button onclick="document.getElementById('wv-pro-message').textContent='Your multitrack workspace is in the original studio.'">
-        Open Tracks
-      </button>
-    </div>
-
-    <div class="wv-pro-card">
-      🎛️
-      <h3>Mix & Master</h3>
-      <button onclick="document.getElementById('wv-pro-message').textContent='Open your Mixing and Mastering section below.'">
-        Open Mixer
-      </button>
-    </div>
-
-    <div class="wv-pro-card">
-      ✨
-      <h3>Vocal Effects</h3>
-      <button onclick="document.getElementById('wv-pro-message').textContent='Explore your pitch correction and vocal effects tools.'">
-        Open Effects
-      </button>
-    </div>
-  </div>
-
-  <p id="wv-pro-message">Welcome to your PRO studio!</p>
-</section>
-<!-- END PRO DASHBOARD -->
-</body>
-</html>
-
 </body>
 </html>
