@@ -391,5 +391,172 @@ initDB().then(()=>{if(db)status('storageState','IndexedDB ready');loadProject();
 window.addEventListener('beforeunload',()=>{if(micStream)micStream.getTracks().forEach(t=>t.stop());});
 })();
 </script>
+ 
+<!-- VIBEZ STUDIO PRO: MASTER ENGINE EXTENSION -->
+<section class="panel" id="vibezEngine">
+  <h2>Vibez Instrument & Effects Rack</h2>
+
+  <div class="row">
+    <label>Instrument
+      <select id="vInstrument">
+        <option value="sawtooth">Synth Lead</option>
+        <option value="sine">Soft Piano</option>
+        <option value="triangle">Warm Keys</option>
+        <option value="square">Bass Synth</option>
+      </select>
+    </label>
+    <label>Master Volume
+      <input id="vMaster" type="range" min="0" max="1"
+             step=".01" value=".8">
+    </label>
+    <label>Reverb
+      <input id="vReverb" type="range" min="0" max="1"
+             step=".01" value=".2">
+    </label>
+  </div>
+
+  <div class="row">
+    <button id="vPlayC" class="primary">Play C4</button>
+    <button id="vPlayE">Play E4</button>
+    <button id="vPlayG">Play G4</button>
+    <button id="vStop" class="danger">Stop rack</button>
+  </div>
+
+  <p class="status" id="vEngineStatus">
+    Built-in instrument rack ready.
+  </p>
+</section>
+
+<script>
+(() => {
+  "use strict";
+
+  const get = id => document.getElementById(id);
+  let ctx = null;
+  let active = [];
+  let masterGain = null;
+  let reverbNode = null;
+  let reverbGain = null;
+
+  function startEngine() {
+    if (!ctx) {
+      ctx = new (window.AudioContext ||
+                 window.webkitAudioContext)();
+
+      masterGain = ctx.createGain();
+      masterGain.gain.value =
+        Number(get("vMaster").value);
+
+      reverbNode = ctx.createConvolver();
+      reverbGain = ctx.createGain();
+      reverbGain.gain.value =
+        Number(get("vReverb").value);
+
+      const length = ctx.sampleRate * 1.5;
+      const impulse = ctx.createBuffer(
+        2, length, ctx.sampleRate
+      );
+
+      for (let channel = 0; channel < 2; channel++) {
+        const data = impulse.getChannelData(channel);
+        for (let i = 0; i < length; i++) {
+          data[i] = (Math.random() * 2 - 1) *
+            Math.pow(1 - i / length, 3);
+        }
+      }
+
+      reverbNode.buffer = impulse;
+
+      const dry = ctx.createGain();
+      const wet = ctx.createGain();
+
+      dry.gain.value = 1;
+      wet.gain.value = 0.25;
+
+      reverbNode.connect(wet);
+      wet.connect(masterGain);
+      masterGain.connect(ctx.destination);
+
+      window.vibezAudio = ctx;
+      get("vEngineStatus").textContent =
+        "Audio engine running.";
+    }
+
+    if (ctx.state === "suspended") ctx.resume();
+    return ctx;
+  }
+
+  function playNote(frequency) {
+    const audio = startEngine();
+    const osc = audio.createOscillator();
+    const envelope = audio.createGain();
+    const filter = audio.createBiquadFilter();
+
+    osc.type = get("vInstrument").value;
+    osc.frequency.value = frequency;
+
+    filter.type = "lowpass";
+    filter.frequency.value = 9000;
+
+    envelope.gain.setValueAtTime(
+      0.0001, audio.currentTime
+    );
+    envelope.gain.exponentialRampToValueAtTime(
+      0.25, audio.currentTime + 0.025
+    );
+
+    osc.connect(filter);
+    filter.connect(envelope);
+    envelope.connect(masterGain);
+
+    osc.start();
+    active.push({ osc, envelope });
+
+    envelope.gain.setTargetAtTime(
+      0.0001, audio.currentTime + 0.3, 0.15
+    );
+
+    osc.stop(audio.currentTime + 1);
+  }
+
+  get("vPlayC").onclick = () => playNote(261.63);
+  get("vPlayE").onclick = () => playNote(329.63);
+  get("vPlayG").onclick = () => playNote(392.00);
+
+  get("vMaster").oninput = e => {
+    if (masterGain) {
+      masterGain.gain.value = Number(e.target.value);
+    }
+  };
+
+  get("vReverb").oninput = e => {
+    if (reverbGain) {
+      reverbGain.gain.value = Number(e.target.value);
+    }
+  };
+
+  get("vStop").onclick = () => {
+    if (!ctx) return;
+    active.forEach(item => {
+      try { item.osc.stop(); } catch (_) {}
+    });
+    active = [];
+    get("vEngineStatus").textContent =
+      "Rack notes stopped.";
+  };
+
+  if ("serviceWorker" in navigator &&
+      location.protocol === "https:") {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register(
+        "./service-worker.js"
+      ).catch(error => {
+        console.warn("Offline registration:", error);
+      });
+    });
+  }
+})();
+</script>
+<!-- END VIBEZ STUDIO EXTENSION -->
 </body>
 </html>
